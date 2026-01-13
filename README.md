@@ -4,12 +4,12 @@ This is an application made with Python with the objective to organize projects.
 
 Technology
 -Python
--Flask
+-Django
 -Css
 -Javascript
 
 Services Used
--Mysql
+-SQLite
 -Github
 
 *In case of sensitive bugs, please contact clarissapdc@gmail.com

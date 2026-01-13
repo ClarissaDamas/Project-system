@@ -5,7 +5,6 @@
 __pycache__
 db.sqlite3
 media
-*.py
 
 # Backup files # 
 *.bak 
@@ -32,6 +31,7 @@ media
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+
 
 # Gradle
 .idea/**/gradle.xml
@@ -69,6 +69,8 @@ wheels/
 *.egg 
 *.manifest 
 *.spec 
+settings.py
+admin.py
 
 # Installer logs 
 pip-log.txt 
@@ -86,8 +88,6 @@ coverage.xml
 *.cover 
 .hypothesis/ 
 
-# Jupyter Notebook 
-.ipynb_checkpoints 
 
 # pyenv 
 .python-version 
@@ -140,4 +140,4 @@ GitHub.sublime-settings
 /venv
 *.pyc
 *.pyc
-venv/Lib/site-packages/pip/_internal/build_env.py
+

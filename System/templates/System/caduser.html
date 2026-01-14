@@ -1,16 +1,15 @@
-<a href="{% url 'index'  %}">
-    <h1>Cadastro de Usuário</h1>
-</a>
+{% extends "System/base.html" %}
 
-{% block content %} 
+{% block content %}
+
 
     <ul>
-        {% for user in user %}
-        <li>{{user}}</li>
+        {% for user in users %}
+            <li>{{user}}</li>
         {% empty %}
-        <li>Sem usuários cadastrados</li>
-        <li>thing 3</li>
+            <li>Sem usuários cadastrados</li>
         {% endfor %}
     </ul>
+
 
 {% endblock content %}

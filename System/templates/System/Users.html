@@ -6,14 +6,18 @@
     {% for user in users %}
         <li>
 
-            {{ user.id }}
+            {{ user.Name }}
 
             <a href="{% url 'perfil' user.id %}"target="_blank"target="_blank">Perfil</a>
         
         </li>
     {% empty %}
         <li>Sem usuários cadastrados</li>
+        <a href="{% url 'addperfil' %}">Novo login</a>
     {% endfor %}
+<a href="{% url 'addperfil' %}">Adicionar novo usuário</a>
+
+
 </ul>
 
 

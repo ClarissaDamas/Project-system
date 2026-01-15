@@ -4,9 +4,12 @@
 
 <h2>Detalhes do Usuário</h2>
 <ul>
-    <li><strong>ID:</strong> {{ perfil.id }}</li>
+
     <li><strong>Nome:</strong> {{ perfil.Name }}</li>
-    <li><strong>E-mail:</strong> {{ perfil.telefone }}</li>
+    <li><strong>CPF:</strong> {{ perfil.cpf }}</li>
+    <li><strong>Telefone:</strong> {{ perfil.Telefone }}</li>
+    <li><strong>E-mail:</strong> {{ perfil.Email }}</li>
+    <li><strong>Data de nascimento:</strong> {{ perfil.DataNascimento }}</li>
 </ul>
 
 <a href="{% url 'Users' %}">Voltar para a lista</a>

@@ -8,6 +8,6 @@ class Usuario(models.Model):
     Email = models.EmailField(max_length=75, blank=True, null=True, verbose_name='Email') 
     DataNascimento = models.DateField(blank=True, null=True, verbose_name='Data de nascimento') 
 
-    #def__str__(self):
-    #return self.text 
+    def __str__(self):
+        return self.name
 

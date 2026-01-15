@@ -1,0 +1,14 @@
+{% extends "System/base.html" %} 
+ 
+{% block content %}  
+
+<h2>Detalhes do Usuário</h2>
+<ul>
+    <li><strong>ID:</strong> {{ perfil.id }}</li>
+    <li><strong>Nome:</strong> {{ perfil.Name }}</li>
+    <li><strong>E-mail:</strong> {{ perfil.telefone }}</li>
+</ul>
+
+<a href="{% url 'Users' %}">Voltar para a lista</a>
+
+{% endblock %} 

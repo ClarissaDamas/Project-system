@@ -1,0 +1,20 @@
+{% extends "System/base.html" %}
+
+{% block content %}
+
+<ul>
+    {% for user in users %}
+        <li>
+
+            {{ user.id }}
+
+            <a href="{% url 'perfil' user.id %}"target="_blank"target="_blank">Perfil</a>
+        
+        </li>
+    {% empty %}
+        <li>Sem usuários cadastrados</li>
+    {% endfor %}
+</ul>
+
+
+{% endblock content %}

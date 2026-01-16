@@ -2,10 +2,10 @@
  
 {% block content %}  
 
-    <form action= "{% url 'login' %}" method = "post">
+    <form action= "{% url 'cadastrar' %}" method = "post">
       {% csrf_token %}
       {{ form.as_p }}  
-      <button name="submit">Entrar</button>
+      <button name="submit">Cadastrar</button>
       <input type = "hidden" name = "next" value = "{% url 'index' %}"/>
     </form>
 

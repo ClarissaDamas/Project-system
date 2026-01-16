@@ -4,12 +4,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class cadastrarform(UserCreationForm):
-    # add additional fields
+    #campos adicionais alem da funcao register do django
     email = forms.EmailField()
-    first_name = forms.CharField()
-    last_name = forms.CharField()
 
     # include Meta class
     class Meta:
         model = User
-        fields = ["username", "first_name", "last_name", "email", "password1", "password2"]
+        fields = ["username", "email", "password1", "password2"]

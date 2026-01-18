@@ -12,7 +12,7 @@ def index(request):
 #Acessar lista de projetos existentes.
 @login_required
 def List_project(request):
-    project = Project.objects.all().order_by('-id')
+    project = Project.objects.filter(dono=request.user).order_by('-id')
     #dicionario abaixo para receber os dados 
     return render(request, 'System/Projects.html', {'projects':project}) 
 

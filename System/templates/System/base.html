@@ -2,10 +2,11 @@
   <body>
     <a href="{% url 'Projects' %}">Projetos</a>
     <a href="/admin">Admin</a>
-    {% if project.is_authenticated %}
-        Hello, {{project.username}}
+    {% if user.is_authenticated %}
+        Bem vindo, {{user.username}}
         <a href="{% url 'logout' %}">Sair</a>
     {% else %}
+            <a>Você não está logado.</a>
             <a href="{% url 'login' %}">Entrar</a>
             <a href="{% url 'cadastrar' %}">Cadastrar</a>
     {% endif %}        

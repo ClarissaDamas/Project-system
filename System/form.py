@@ -11,10 +11,9 @@ class addproject(ModelForm):
         fields = ["name", "objetivo", "datainicio", "datafinal", "dono", "colaboradores"]
         #campo widgets adicionado com IA
         widgets = {
-            'start_date': forms.DateInput(attrs={'type': 'date'}),
-            'end_date': forms.DateInput(attrs={'type': 'date'}),
-            'objective': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Máximo 250 caracteres'}),
-        }
+            'datainicio': forms.DateInput(attrs={'type': 'date'}),
+            'datafinal': forms.DateInput(attrs={'type': 'date'}),
+            'objetivo': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Máximo 250 caracteres'}),}
         
 class ProjectItemForm(forms.ModelForm):
     class Meta:
@@ -22,7 +21,7 @@ class ProjectItemForm(forms.ModelForm):
         fields = '__all__'
     #campo widgets adicionado com IA
         widgets = {
-            'deadline': forms.DateInput(attrs={'type': 'date'}),
+            'prazo': forms.DateInput(attrs={'type': 'date'}),
             'description': forms.Textarea(attrs={'rows': 4}),
         }
 

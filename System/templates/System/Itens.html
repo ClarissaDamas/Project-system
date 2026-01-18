@@ -1,0 +1,50 @@
+{% extends "System/base.html" %} 
+ 
+{% block content %}  
+
+    <p>Projeto: {{project}}</p>
+
+    <p>Subitens:</p>
+    <ul>
+        {% for item in itens %}
+        <div class="item-box">
+        
+            <p>Título: {{ item.title }}</p>
+            <p>Descrição: {{ item.description}}</p>
+            <p>Tipo: {{ item.get_tipo_display }}</p>
+            <p>
+            Status: 
+            {% if item.status == 'P' %}
+                <span style="color: orange;">{{ item.get_status_display }}</span>
+            {% elif item.status == 'A' %}
+                <span style="color: blue;">{{ item.get_status_display }}</span>
+            {% elif item.status == 'C' %}
+                <span style="color: green;">{{ item.get_status_display }}</span>
+            {% endif %}
+            </p>
+            <p>
+            Prazo: 
+            {% if item.prazo == None %}
+                Sem prazo definido
+            {% else %}
+                {{ item.prazo }}
+            {% endif %}
+            </p>
+        </div>
+        <p>
+            <a href="{% url 'edit_item' item.id %}">Editar este item</a>
+        </p>
+
+        {% empty %}
+
+        <li>Sem subitens</li>
+        <a href="{% url 'new_item' project.id %}">Adicionar subitem</a>
+        {% endfor %}
+
+</ul>
+
+
+{% endblock content %}  
+
+
+

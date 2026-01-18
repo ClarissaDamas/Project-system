@@ -1,0 +1,16 @@
+{% extends "System/base.html" %} 
+ 
+{% block content %}  
+
+<form action="{% url 'edit_item' item.id %}" method="post">
+    {% csrf_token %}
+    
+    {{ form.as_p }}
+    
+    <button type="submit">Salvar Alterações</button>
+    <a href="{% url 'Itens' project.id %}">Cancelar</a>
+</form>
+
+{% endblock content %}  
+
+

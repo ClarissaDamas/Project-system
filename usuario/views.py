@@ -13,7 +13,7 @@ def logout_usuario(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
 
-@login_required
+
 def cadastrar(request):
     #fazer cadastro usuario
     if request.method != 'POST':
@@ -32,4 +32,4 @@ def cadastrar(request):
             login(request, authenticated_user)
             return HttpResponseRedirect(reverse('index'))
 
-    return render(request, "usuário/cadastrar.html", {"form": form})
+    return render(request, "usuario/cadastrar.html", {"form": form})

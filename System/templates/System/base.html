@@ -1,9 +1,9 @@
 <html>
   <body>
-    <a href="{% url 'Users' %}">Usuários</a>
+    <a href="{% url 'Projects' %}">Projetos</a>
     <a href="/admin">Admin</a>
-    {% if user.is_authenticated %}
-        Hello, {{user.username}}
+    {% if project.is_authenticated %}
+        Hello, {{project.username}}
         <a href="{% url 'logout' %}">Sair</a>
     {% else %}
             <a href="{% url 'login' %}">Entrar</a>

@@ -1,0 +1,31 @@
+{% extends "System/base.html" %} 
+ 
+{% block content %}  
+<h2>Detalhes do Projeto</h2>
+<ul>
+
+    <li><strong>Nome:</strong> {{ project.name }}</li>
+    <li><strong>Objetivo:</strong> {{ project.objetivo }}</li>
+    <li><strong>Data de início:</strong> {{ project.datainicio }}</li>
+    <li><strong>Data final:</strong> {{ project.datafinal }}</li>
+</ul>
+
+<button>
+  <a href="{% url 'Projects' %}" style="text-decoration: none; color: rgb(0, 8, 255);">
+    Lista projetos
+  </a>
+</button>
+<button>
+  <a href="{% url 'new_item' project.id %}" style="text-decoration: none; color: orange;">
+    Adicionar subitem
+  </a>
+</button>
+<button>
+  <a href="{% url 'Itens' project.id %}" style="text-decoration: none; color: rgb(255, 0, 157);">
+    Lista subitens
+  </a>
+</button>
+
+
+
+{% endblock %} 

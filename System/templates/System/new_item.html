@@ -1,0 +1,18 @@
+{% extends "System/base.html" %} 
+ 
+{% block content %}  
+
+    <p>Adicionando item ao projeto: {{ project.name }}</p>
+    <p><a href="{% url 'new_item' project.id %}"></a></p>
+    <form action= "{% url 'new_item' project.id %}" method = "post">
+      {% csrf_token %}
+      {{ form.as_p }}  
+      <button name="submit">Adicionar subitem</button>
+      <input type = "hidden" name = "next" value = "{% url 'index' %}"/>
+    </form>
+
+
+{% endblock content %}  
+
+
+

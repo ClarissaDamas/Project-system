@@ -5,9 +5,17 @@
     <form action= "{% url 'addproject' %}" method = "post">
       {% csrf_token %}
       {{ form.as_p }}  
-      <button name="submit">Adicionar</button>
+      <button name="submit">Adicionar</button>  
+      <p>Selecione os usuários que podem colaborar neste projeto:</p>
+      {{ form.colaboradores}}
+      <button type="submit">Salvar Colaboradores</button>
       <input type = "hidden" name = "next" value = "{% url 'index' %}"/>
     </form>
 
+    
+
 
 {% endblock content %}  
+
+ 
+  

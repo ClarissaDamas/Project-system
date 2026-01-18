@@ -9,9 +9,10 @@ class Usuario(AbstractUser):
     email = models.EmailField(unique=True)
     cpf = models.CharField(max_length=14, unique=True)
     telefone = models.CharField(max_length=15)
-    data_nascimento = models.DateField(verbose_name='Data de nascimento')
+    data_nascimento = models.DateField( null=True, blank=True, verbose_name='Data de nascimento')
     #Não permitir salvar se “Aceite” não estiver marcado
     aceite_cadastro  = models.BooleanField(default=False)
+
 
     class Meta:
         verbose_name= 'Usuário'

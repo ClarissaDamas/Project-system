@@ -36,7 +36,7 @@ class ProjectItem(models.Model):
     )
     #O project do modelo PROJETO esta ligado ao project do modelo PROJECTITEM por uma chave estrangeira 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='subitens', verbose_name='Projeto')
-    
+    resp = models.ForeignKey(settings.AUTH_USER_MODEL,  on_delete=models.PROTECT, related_name='Responsavel',  verbose_name='Responsável pelo subitem')
     title = models.CharField(max_length=200, verbose_name='Título')
     description =  models.TextField( verbose_name='Descrição')
     #blank e null True para ser opcional
@@ -50,6 +50,6 @@ class ProjectItem(models.Model):
 
     def __str__(self):
     #aparecer somente os primeiros 50 caracteres
-        return self.description[:50] 
+        return self.description[:50] ,self.resp.username
     
 

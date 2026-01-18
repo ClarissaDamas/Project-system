@@ -1,0 +1,16 @@
+{% extends "System/base.html" %}
+
+{% block content %}
+  <h2>Gerenciar Colaboradores: {{ project.name }}</h2>
+  
+  <form method="post">
+    {% csrf_token %}
+    <p>Selecione os usuários que podem colaborar neste projeto:</p>
+    {{ form.colaboradores}}
+    
+    <br>
+    <button type="submit">Salvar Colaboradores</button>
+    <a href="{% url 'Itens' project.id %}">Voltar</a>
+  </form>
+  
+{% endblock %}

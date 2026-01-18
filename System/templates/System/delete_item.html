@@ -1,0 +1,16 @@
+{% extends "System/base.html" %} 
+ 
+{% block content %}  
+
+<form action="{% url 'delete_item' item.id %}" method="post">
+    {% csrf_token %}
+    
+    {{ form.as_p }}
+    
+    <button type="submit">Deletar</button>
+    <a href="{% url 'Itens' project.id %}">Cancelar</a>
+</form>
+
+{% endblock content %}  
+
+

@@ -34,6 +34,9 @@
         <p>
             <a href="{% url 'edit_item' item.id %}">Editar este item</a>
         </p>
+        <p>
+            <a href="{% url 'delete_item' item.id %}">Deletar este item</a>
+        </p>
 
         {% empty %}
 

@@ -4,62 +4,56 @@ from django.urls import reverse
 from .models import Project, ProjectItem
 from .form import addproject , ProjectItemForm
 from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import UpdateView, DeleteView
-
 
 
 def index(request):
     return render(request, 'System/index.html') 
 
+#Acessar lista de projetos existentes.
 @login_required
 def List_project(request):
-    #acessar banco de dados de usuarios
     project = Project.objects.all().order_by('-id')
     #dicionario abaixo para receber os dados 
     return render(request, 'System/Projects.html', {'projects':project}) 
 
+#Apresentar detalhes do projeto.
 @login_required
 def detalhes_project(request, project_id):
-    #apresentar o perfil
     dprojeto = get_object_or_404(Project, id = project_id)
     #dicionario abaixo para receber os dados 
     return render(request, 'System/detalhesprojeto.html', {'project':dprojeto} ) 
 
+#Cadastrar novo projeto
 @login_required
-#Cadastro de Projeto
 def add_project(request):
     if request.method != 'POST':
-
         form = addproject() #metodo GET mostra o forms vazio
 
-    else:
-        
+    else:       
         form = addproject(request.POST)
 
         if form.is_valid():
-            #Save a new project
             form.save()
-             #no deploy o dominio modifica, portanto nao pode colocar URL completa agora
             return HttpResponseRedirect(reverse('Projects'))
 
     return render(request, "System/addproject.html", {"form": form})
 
+#Mostrar todos os subitens de um projeto.
 @login_required
 def Itens(request,project_id):
-    #mostra todos os itens de um projeto
     project = Project.objects.get(id = project_id)
     itens = project.subitens.all().order_by('-id')
     return render(request, 'System/Itens.html', {'project':project, "itens": itens}) 
 
 
-@login_required
 #Adicionar novo subitem do projeto
+@login_required
 def new_item(request, project_id):
     #acessar banco de dados de projetos
     project = get_object_or_404(Project, id=project_id)
 
     if request.method != 'POST':
-        form = ProjectItemForm() #metodo GET mostra o forms vazio
+        form = ProjectItemForm() 
 
     else:
         #acrescentar os dados antes de enviar
@@ -75,13 +69,12 @@ def new_item(request, project_id):
 
     return render(request, 'System/new_item.html', {'project':project, "form": form}) 
 
-
+#Alterar um subitem existente.
 @login_required
 def edit_item(request, item_id):
-    #Altera um subitem criado.
+
     item = get_object_or_404(ProjectItem, id=item_id)
     project = item.project
-
 
     if request.method == 'POST':
         #Receber os dados do metodo post e substituir pelos dados que estavam na variavel ITEM
@@ -90,8 +83,34 @@ def edit_item(request, item_id):
             form.save()
             return redirect('Itens', project_id = project.id)
     else:
-        # formulário com erros 
+    
         form = ProjectItemForm(instance=item) #Apresenta o forms preenchido com os subitens registrados previamente.
+
+#Tupla de project e Item para usar no html
+    context = {
+        'item': item, 
+        'project': project, 
+        'form': form    
+    }
+
+    return render(request, 'System/edit_item.html', context)
+
+#Deletar um subitem existente
+@login_required
+def delete_item(request, item_id):
+
+    item = get_object_or_404(ProjectItem, id=item_id)
+    project = item.project
+
+
+    if request.method != 'POST':
+        form = ProjectItemForm(instance=item) 
+
+
+    else:
+        #Receber os dados e deletar 
+        item.delete()
+        return redirect('Itens', project_id = project.id)
 
     context = {
         'item': item, 
@@ -99,9 +118,8 @@ def edit_item(request, item_id):
         'form': form    
     }
 
+    return render(request, 'System/delete_item.html', context)
 
 
-#Tupla de project e Item para usar no html e fazer possiveis alteracoes
-    return render(request, 'System/edit_item.html', context)
 
 

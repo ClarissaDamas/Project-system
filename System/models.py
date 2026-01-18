@@ -1,23 +1,17 @@
 #use the database
 from django.db import models
-from django.utils import timezone
 from django.conf import settings
-from django.contrib.auth.models import User
 
 class Project(models.Model):
     name = models.CharField(max_length=200, verbose_name='Nome projeto') 
-    # Relação 1:N - Um projeto tem um único dono (usuário)
+    #Um projeto sempre pertence a um usuário (dono)
     dono  = models.ForeignKey( settings.AUTH_USER_MODEL,  on_delete=models.CASCADE, related_name='owned_projects',  verbose_name='Dono do Projeto')
-    # Relação N:N - Um projeto pode ter vários colaboradores e um usuário pode estar em vários projetos
-    colaboradores = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, 
-        related_name='collaborating_projects',
-        blank=True,
-        verbose_name='Colaboradores'
+    #Um projeto pode ter vários colaboradores e um usuário pode estar em vários projetos
+    colaboradores = models.ManyToManyField( settings.AUTH_USER_MODEL, default="Sem colaboradores", related_name='collaborating_projects', verbose_name='Colaboradores'
     )
     objetivo = models.TextField(default= "Insira objetivo",max_length=250 , verbose_name='Descrição curta em 250 caracteres')
     datainicio = models.DateField(default="AAAA-MM-DD",verbose_name='Data inicial')
-    datafinal = models.DateField(blank=True, null=True, verbose_name='Data final') 
+    datafinal = models.DateField(default="AAAA-MM-DD", verbose_name='Data final') 
 
     class Meta:
          verbose_name= 'Projeto'
@@ -32,7 +26,7 @@ class ProjectItem(models.Model):
         ('E', 'Entregas'),
         ('A', 'Etapas'),
         ('M', 'Melhorar'),
-        ('R', 'Revisadas'),
+        ('R', 'Revisar'),
         ('O', 'Outro'),
     )
     STATUS_CHOICES = (

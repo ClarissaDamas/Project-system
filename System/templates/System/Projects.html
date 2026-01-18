@@ -8,12 +8,11 @@
 
             {{ project.name }}
 
-            <a href="{% url 'detalhesprojeto' project.id %}"target="_blank"target="_blank">Project</a>
+            <a href="{% url 'detalhesprojeto' project.id %}"target="_blank"target="_blank">Detalhes</a>
         
         </li>
     {% empty %}
-        <li>Sem usuários cadastrados</li>
-        <a href="{% url 'addproject' %}">Novo login</a>
+        <li>Sem projetos cadastrados</li>
     {% endfor %}
 <a href="{% url 'addproject' %}">Adicionar novo projeto</a>
 

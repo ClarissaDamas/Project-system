@@ -2,21 +2,23 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Usuario
 from datetime import date
-import re
 
 
 class cadastrarform(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Usuario
+        #Utilizar campos do usercreation e adicionar campos do model criado.
         fields = UserCreationForm.Meta.fields + ("email", "cpf", "telefone", "data_nascimento", "aceite_termos")
+        #widgets no campo cpf e telefone 
+        widgets = { 'cpf': forms.TextInput(attrs={'class': 'cpf', 'placeholder': '000.000.000-00'}), 'telefone' : forms.TextInput(attrs={'class': 'telefone', 'placeholder': '(00) 00000-0000'}), }
 
     # Validar CPF (Lógica simplificada de dígitos)
     def clean_cpf(self):
-        cpf = re.sub(r'\D', '', self.cleaned_data.get('cpf')) # Remove pontos e traços
-        if len(cpf) != 11:
+    #Se o tamanho do self.cpf for maior que 11 retorna erro(cpf válido)
+        cpf = self.cleaned_data.get('cpf')
+        if len(cpf)!= 11:
             raise forms.ValidationError("O CPF deve ter 11 dígitos.")
-        # Aqui você pode inserir uma lógica completa de cálculo de dígitos verificadores
-        return self.cleaned_data.get('cpf')
+        return cpf
 
     # Validar Data de Nascimento
     def clean_data_nascimento(self):

@@ -50,6 +50,6 @@ class ProjectItem(models.Model):
 
     def __str__(self):
     #aparecer somente os primeiros 50 caracteres
-        return self.description[:50] ,self.resp.username
+        return f"{self.title} - Responsável: {self.resp.username}"
     
 

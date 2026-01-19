@@ -1,3 +1,6 @@
+    <!-- 
+      Codigo base para os outros codigos
+    -->
 <html>
   <body>
     <a href="{% url 'Projects' %}">Projetos</a>
@@ -5,6 +8,7 @@
     {% if user.is_authenticated %}
         Bem vindo, {{user.username}}
         <a href="{% url 'logout' %}">Sair</a>
+        <a href="{% url 'perfil' user.id  %}">perfil</a>
     {% else %}
             <a>Você não está logado.</a>
             <a href="{% url 'login' %}">Entrar</a>

@@ -2,6 +2,11 @@
  
 {% block content %}  
 
+    <!-- 
+      Adiciona um novo subitem 
+    -->
+
+
     <p>Adicionando item ao projeto: {{ project.name }}</p>
     <p><a href="{% url 'new_item' project.id %}"></a></p>
     <form action= "{% url 'new_item' project.id %}" method = "post">

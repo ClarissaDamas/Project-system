@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import logout,login,authenticate
 from .forms import cadastrarform
+from django.shortcuts import render,get_object_or_404,redirect
+from .models import Usuario
 
 
 #Logout do usuario.
@@ -31,3 +33,12 @@ def cadastrar(request):
             return HttpResponseRedirect(reverse('index'))
 
     return render(request, "usuario/cadastrar.html", {"form": form})
+
+def perfil(request, user_id):
+    #perfil = get_object_or_404(Usuario, id = user_id)
+    #perfil = usuario.subitens.all().order_by('-id')
+    #if usuario.username == request.user: 
+    return render(request, 'usuario/perfil.html', {'perfil':perfil} )
+    #else:
+        #return render(request, 'System/error.html' )
+    

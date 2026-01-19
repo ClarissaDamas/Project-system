@@ -2,7 +2,13 @@
 
 {% block content %}
 
+    <!-- 
+      Dashboard usuario com projetos que ele e dono + botao direcionando para o perfil do usuario
+    -->
 
+    <!-- 
+      CRIAR uma tabela que mostre projetos em que ele e dono e subitens que ele e responsavel(fazer essa tabela no meu HTML projects, que ja tem a opcao de adicionar um novo projeto)
+    -->
 <ul>
     {% for project in projects %}
         <li>
@@ -10,7 +16,9 @@
             {{ project.name }}
 
             <a href="{% url 'detalhesprojeto' project.id %}"target="_blank"target="_blank">Detalhes</a>
-            <a href="{% url 'manage_collaborators' project.id  %}"target="_blank"target="_blank">Colaboradores</a>
+            {% if project.dono == request.user %}
+            <a href="{% url 'manage_collaborators' project.id  %}"target="_blank"target="_blank">Gerenciar colaboradores</a>
+            {% endif %}
         
         </li>
     {% empty %}

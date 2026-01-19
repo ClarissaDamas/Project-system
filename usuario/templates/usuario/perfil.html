@@ -1,0 +1,25 @@
+{% extends "System/base.html" %} 
+ 
+{% block content %}  
+
+ADICIONAR opcao de  Visualizr o cadastro do USER  cadastrado de detalhe do usuário com um perfil nesse perfil criar um botao para linkar a uma
+
+<h2>Perfil</h2>
+<ul>
+
+    <li><strong>Nome:</strong> {{user.username }}</li>
+    <li><strong>E-mail:</strong> {{ user.email }}</li>
+    <li><strong>CPF:</strong> {{ user.cpf }}</li>
+    <li><strong>Telefone:</strong> {{ user.telefone }}</li>
+    <li><strong>Data de nascimento:</strong> {{ user.data_nascimento }}</li>
+</ul>
+
+<button>
+  <a href="{% url 'Projects' %}" style="text-decoration: none; color: rgb(0, 8, 255);">
+    Lista projetos
+  </a>
+</button>
+
+
+
+{% endblock content %}  

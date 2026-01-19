@@ -1,21 +1,50 @@
 {% extends "System/base.html" %} 
- 
-{% block content %}  
 
-    <form action= "{% url 'addproject' %}" method = "post">
-      {% csrf_token %}
-      {{ form.as_p }}  
-      <button name="submit">Adicionar</button>  
-      <p>Selecione os usuários que podem colaborar neste projeto:</p>
-      {{ form.colaboradores}}
-      <button type="submit">Salvar Colaboradores</button>
-      <input type = "hidden" name = "next" value = "{% url 'index' %}"/>
+{% block content %}  
+    <h2>Criar Novo Projeto</h2>
+
+    <form action="{% url 'addproject' %}" method="post" >
+        {% csrf_token %}
+        {{ form.as_p }}  
+
+        <button type="submit" class="btn-save">Salvar Projeto</button>
+        <input type="hidden" name="next" value="{% url 'index' %}"/>
     </form>
 
-    
+    <style>
+        .project-form {
+            max-width: 500px;
+            margin: 20px 0;
+        }
 
+        .field-section {
+            margin-bottom: 20px;
+        }
 
-{% endblock content %}  
+        /* Remove as bolinhas da lista do Django e organiza em colunas */
+        .checkbox-grid ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            list-style: none;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
 
- 
-  
+        .checkbox-grid label {
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .btn-save {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+{% endblock content %}

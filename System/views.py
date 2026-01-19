@@ -2,6 +2,7 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 from .models import Project, ProjectItem 
+from django.db.models import Q
 from .form import addproject , ProjectItemForm , AddCollaboratorForm
 from django.contrib.auth.decorators import login_required
 
@@ -16,20 +17,25 @@ def page_error(request):
 #Acessar lista de projetos existentes.
 @login_required
 def List_project(request):
-    project = Project.objects.filter(dono=request.user).order_by('-id')
+    project_dono = Project.objects.filter(dono=request.user)
+    project_colaborador = Project.objects.filter(colaboradores=request.user)
+    #project = Project.objects.filter(Q(dono=request.user) | Q(colaboradores=request.user)).distinct().order_by('-id')
     #dicionario abaixo para receber os dados 
+    project = (project_dono | project_colaborador).distinct().order_by('-id')
     return render(request, 'System/Projects.html', {'projects':project}) 
 
 #Apresentar detalhes do projeto.
 @login_required
 def detalhes_project(request, project_id):
     dprojeto = get_object_or_404(Project, id = project_id)
-    #dicionario abaixo para receber os dados 
 
-    if dprojeto.dono == request.user: 
+    # Verifica se o usuário logado é o dono OU colaborador
+    if request.user == dprojeto.dono or request.user in dprojeto.colaboradores.all():
         return render(request, 'System/detalhesprojeto.html', {'project':dprojeto} )
     else:
         return render(request, 'System/error.html' )
+
+
 
 #Cadastrar novo projeto
 @login_required
@@ -50,6 +56,7 @@ def add_project(request):
 @login_required
 def Itens(request,project_id):
     project = Project.objects.get(id = project_id)
+    
     itens = project.subitens.all().order_by('-id')
     return render(request, 'System/Itens.html', {'project':project, "itens": itens}) 
 
@@ -60,7 +67,7 @@ def new_item(request, project_id):
     #acessar banco de dados de projetos
     project = get_object_or_404(Project, id=project_id)
 
-    if project.dono  != request.user: 
+    if project.dono  != request.user or request.user in project.colaboradores.all():
         return render(request, 'System/error.html' )
 
     if request.method != 'POST':
@@ -87,7 +94,7 @@ def edit_item(request, item_id):
     item = get_object_or_404(ProjectItem, id=item_id)
     project = item.project
 
-    if project.dono  != request.user: 
+    if project.dono  != request.user or request.user in project.colaboradores.all():
         return render(request, 'System/error.html' )
 
     else:
@@ -141,7 +148,7 @@ def manage_collaborators(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     
     # Segurança: Apenas o dono pode gerenciar colaboradores
-    if request.user != project.dono:
+    if project.dono  != request.user or request.user in project.colaboradores.all():
         return HttpResponseForbidden("Apenas o dono pode adicionar colaboradores.")
 
     if request.method == 'POST':

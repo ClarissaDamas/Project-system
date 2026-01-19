@@ -2,17 +2,27 @@
  
 {% block content %}  
 
+    <!-- 
+     Apresentar TUDO sobre os subitens(nome e os campos preenchidos)
+    -->
+
+
     <p>Projeto: {{project}}</p>
 
     <p>Subitens:</p>
     <ul>
         {% for item in itens %}
         <div class="item-box">
-        
+       <!-- TÍTULO  --> 
             <p>Título: {{ item.title }}</p>
+        <!-- DESCRIÇÃO  --> 
             <p>Descrição: {{ item.description}}</p>
+        <!-- RESPONSÁVEL  --> 
+            <p>Responsável: {{ item.resp }}</p>
+       <!-- TIPO  --> 
             <p>Tipo: {{ item.get_tipo_display }}</p>
             <p>
+       <!-- STATUS  --> 
             Status: 
             {% if item.status == 'P' %}
                 <span style="color: orange;">{{ item.get_status_display }}</span>
@@ -23,6 +33,7 @@
             {% endif %}
             </p>
             <p>
+      <!-- PRAZO -->           
             Prazo: 
             {% if item.prazo == None %}
                 Sem prazo definido
@@ -31,12 +42,14 @@
             {% endif %}
             </p>
         </div>
+        {% if project.dono == request.user %}
         <p>
             <a href="{% url 'edit_item' item.id %}">Editar este item</a>
         </p>
         <p>
             <a href="{% url 'delete_item' item.id %}">Deletar este item</a>
         </p>
+        {% endif %}
 
         {% empty %}
 

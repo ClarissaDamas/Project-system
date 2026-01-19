@@ -2,6 +2,11 @@
  
 {% block content %}  
 
+    <!-- 
+      Editar um item
+    -->
+
+
 <form action="{% url 'edit_item' item.id %}" method="post">
     {% csrf_token %}
     

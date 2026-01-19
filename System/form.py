@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.auth import get_user_model
 #importar abaixo o model\classe Project
+from django.db.models import Q
 from .models import Project, ProjectItem 
 from django.db import models
 
@@ -17,10 +18,10 @@ class AddCollaboratorForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Opcional: Estilizar o campo para seleção múltipla
         self.fields['colaboradores'].widget = forms.CheckboxSelectMultiple()
-        # Opcional: Excluir o dono da lista de colaboradores para não duplicar
-        if self.instance.pk:
-            self.fields['colaboradores'].queryset = User.objects.exclude(pk=self.instance.dono.pk)
+        self.fields['colaboradores'].queryset = get_user_model().objects.all()
 
+
+  
 class addproject(ModelForm):
     class Meta:
         model = Project
@@ -31,10 +32,19 @@ class addproject(ModelForm):
             'datafinal': forms.DateInput(attrs={'type': 'date'}),
             'objetivo': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Máximo 250 caracteres'}),}
         
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Opcional: Estilizar o campo para seleção múltipla
+        self.fields['colaboradores'].widget = forms.CheckboxSelectMultiple()
+        self.fields['colaboradores'].queryset = get_user_model().objects.all()
+
+        #Excluir o dono da lista de colaboradores para não duplicar
+
+        
 class ProjectItemForm(forms.ModelForm):
     class Meta:
         model = ProjectItem
-        fields = '__all__'
+        fields = ["resp", "title", "description", "prazo", "status", "tipo"]
     #campo widgets adicionado com IA
         widgets = {
             'prazo': forms.DateInput(attrs={'type': 'date'}),
@@ -50,6 +60,7 @@ class ProjectItemForm(forms.ModelForm):
         if project:
             # Filtra para mostrar apenas o dono OU colaboradores do projeto
             self.fields['resp'].queryset = User.objects.filter( models.Q(id=project.dono.id) | models.Q(collaborating_projects=project) ).distinct()
+
 
 
 

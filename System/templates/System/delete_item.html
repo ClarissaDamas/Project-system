@@ -2,6 +2,10 @@
  
 {% block content %}  
 
+    <!-- 
+      Deletar um subitem criado
+    -->
+
 <form action="{% url 'delete_item' item.id %}" method="post">
     {% csrf_token %}
     

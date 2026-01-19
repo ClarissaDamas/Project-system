@@ -15,7 +15,7 @@
 
             {{ project.name }}
 
-            <a href="{% url 'detalhesprojeto' project.id %}"target="_blank"target="_blank">Detalhes</a>
+            <a href="{% url 'detalhesprojeto' project.id %}">Detalhes</a>
             {% if project.dono == request.user %}
             <a href="{% url 'manage_collaborators' project.id  %}"target="_blank"target="_blank">Gerenciar colaboradores</a>
             {% endif %}

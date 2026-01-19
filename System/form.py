@@ -6,7 +6,7 @@ from django.db.models import Q
 from .models import Project, ProjectItem 
 from django.db import models
 
-#usar um modelo de usuário que estiver ativo neste projeto
+#usar um modelo de usuário que estiver ativo neste projeto(usuários ativos podem ser gerenciados no admin do django)
 User = get_user_model()
 
 class AddCollaboratorForm(forms.ModelForm):
@@ -16,7 +16,6 @@ class AddCollaboratorForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Opcional: Estilizar o campo para seleção múltipla
         self.fields['colaboradores'].widget = forms.CheckboxSelectMultiple()
         self.fields['colaboradores'].queryset = get_user_model().objects.all()
 
@@ -34,24 +33,22 @@ class addproject(ModelForm):
         
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Opcional: Estilizar o campo para seleção múltipla
         self.fields['colaboradores'].widget = forms.CheckboxSelectMultiple()
         self.fields['colaboradores'].queryset = get_user_model().objects.all()
-
-        #Excluir o dono da lista de colaboradores para não duplicar
 
         
 class ProjectItemForm(forms.ModelForm):
     class Meta:
         model = ProjectItem
         fields = ["resp", "title", "description", "prazo", "status", "tipo"]
+
     #campo widgets adicionado com IA
         widgets = {
             'prazo': forms.DateInput(attrs={'type': 'date'}),
             'description': forms.Textarea(attrs={'rows': 4}),
         }
-#Funcao de filtrar adicionada com IA
 
+    #Funcao de filtrar adicionada com IA
     def __init__(self, *args, **kwargs):
         # Recebemos o projeto via view para filtrar os usuários
         project = kwargs.pop('project', None)

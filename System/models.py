@@ -6,7 +6,7 @@ class Project(models.Model):
     name = models.CharField(max_length=200, verbose_name='Nome projeto') 
     #Um projeto sempre pertence a um usuário (dono)
     dono  = models.ForeignKey( settings.AUTH_USER_MODEL,  on_delete=models.CASCADE, related_name='owned_projects',  verbose_name='Dono do Projeto')
-    #Um projeto pode ter vários colaboradores e um usuário pode estar em vários projetos
+    #Um projeto pode ter vários colaboradores\Responsável pelo subitem e um usuário pode estar em vários projetos
     colaboradores = models.ManyToManyField( settings.AUTH_USER_MODEL, default="Sem colaboradores", related_name='collaborating_projects', verbose_name='Colaboradores'
     )
     objetivo = models.TextField(default= "Insira objetivo",max_length=250 , verbose_name='Descrição curta em 250 caracteres')
@@ -39,7 +39,6 @@ class ProjectItem(models.Model):
     resp = models.ForeignKey(settings.AUTH_USER_MODEL,  on_delete=models.PROTECT, related_name='Responsavel',  verbose_name='Responsável pelo subitem')
     title = models.CharField(max_length=200, verbose_name='Título')
     description =  models.TextField( verbose_name='Descrição')
-    #blank e null True para ser opcional
     prazo = models.DateField(blank=True, null=True, verbose_name='Data final prevista(opcional)')
     status  = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Status')
     tipo  = models.CharField(default='O', max_length=1, choices=TYPE_CHOICES, verbose_name='Tipo')
@@ -49,7 +48,7 @@ class ProjectItem(models.Model):
         verbose_name_plural ='Subitens dos projetos'
 
     def __str__(self):
-    #aparecer somente os primeiros 50 caracteres
+    #aparecer somente os primeiros 50 caracteres + o nome do Responsável pelo subitem
         return f"{self.title} - Responsável: {self.resp.username}"
     
 

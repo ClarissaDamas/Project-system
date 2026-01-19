@@ -7,7 +7,7 @@
     -->
 
 
-    <p>Projeto: {{project}}</p>
+    <p>Subitens do projeto: {{ project.name }}</p>
 
     <p>Subitens:</p>
     <ul>
@@ -42,14 +42,15 @@
             {% endif %}
             </p>
         </div>
+
         {% if project.dono == request.user %}
-        <p>
-            <a href="{% url 'edit_item' item.id %}">Editar este item</a>
-        </p>
         <p>
             <a href="{% url 'delete_item' item.id %}">Deletar este item</a>
         </p>
         {% endif %}
+                <p>
+            <a href="{% url 'edit_item' item.id %}">Editar este item</a>
+        </p>
 
         {% empty %}
 

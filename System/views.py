@@ -2,7 +2,6 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 from .models import Project, ProjectItem 
-from django.db.models import Q
 from .form import addproject , ProjectItemForm , AddCollaboratorForm
 from django.contrib.auth.decorators import login_required
 
@@ -14,17 +13,15 @@ def page_error(request):
     return render(request, 'System/error.html') 
 
 
-#Acessar lista de projetos existentes.
+#Acessar lista de projetos existentes(permitido dono ou colaborador)
 @login_required
 def List_project(request):
     project_dono = Project.objects.filter(dono=request.user)
     project_colaborador = Project.objects.filter(colaboradores=request.user)
-    #project = Project.objects.filter(Q(dono=request.user) | Q(colaboradores=request.user)).distinct().order_by('-id')
-    #dicionario abaixo para receber os dados 
     project = (project_dono | project_colaborador).distinct().order_by('-id')
     return render(request, 'System/Projects.html', {'projects':project}) 
 
-#Apresentar detalhes do projeto.
+#Apresentar detalhes do projeto(permitido dono ou colaborador)
 @login_required
 def detalhes_project(request, project_id):
     dprojeto = get_object_or_404(Project, id = project_id)
@@ -37,7 +34,7 @@ def detalhes_project(request, project_id):
 
 
 
-#Cadastrar novo projeto
+#Cadastrar novo projeto(permitido todos logados)
 @login_required
 def add_project(request):
     if request.method != 'POST':
@@ -52,43 +49,48 @@ def add_project(request):
 
     return render(request, "System/addproject.html", {"form": form})
 
-#Mostrar todos os subitens de um projeto.
+# Mostrar subitens de um projeto (dono tem acesso a todos os subitens; colaborador tem acesso apenas aos subitens pelos quais é responsável)
 @login_required
-def Itens(request,project_id):
+def Itens(request, project_id):
     project = Project.objects.get(id = project_id)
-    
-    itens = project.subitens.all().order_by('-id')
+    responsavel_objetos = ProjectItem.objects.filter(project=project, resp=request.user)
+    if project.dono  == request.user: 
+        itens = project.subitens.all().order_by('-id') 
+    elif responsavel_objetos.exists():
+        itens = project.subitens.filter(resp=request.user).order_by('-id')
+    else:
+        return render(request, 'System/error.html' )
     return render(request, 'System/Itens.html', {'project':project, "itens": itens}) 
 
 
-#Adicionar novo subitem do projeto
+#Adicionar novo subitem do projeto (permitido dono )
 @login_required
 def new_item(request, project_id):
     #acessar banco de dados de projetos
     project = get_object_or_404(Project, id=project_id)
 
-    if project.dono  != request.user or request.user in project.colaboradores.all():
-        return render(request, 'System/error.html' )
-
     if request.method != 'POST':
         form = ProjectItemForm(project=project)
-
-    else:
-        #acrescentar os dados antes de enviar
-        form = ProjectItemForm(data=request.POST, project = project)
+          
+    if project.dono  == request.user: #Para mudar e os colaboradores\Responsável conseguirem criar um novo SUBITEM basta adicionar depois de request.user --> or request.user in project.colaboradores.all()   
+                
+        form = ProjectItemForm(data=request.POST, project = project) #acrescentar os dados antes de enviar
 
         if form.is_valid():
-            #Nao salvar diretamente, acrescentar somente os dados
-            new_item = form.save(commit=False)
+            new_item = form.save(commit=False)  #Nao salvar diretamente, acrescentar somente os dados
             new_item.project = project
             new_item.save()
-            #passar argumento do project ID 
-            return HttpResponseRedirect(reverse('detalhesprojeto', args=[project_id]))
+            return HttpResponseRedirect(reverse('detalhesprojeto', args=[project_id]))  #passar argumento do project ID 
+        
+
+    else:
+        return render(request, 'System/error.html' )
+
 
     return render(request, 'System/new_item.html', {'project':project, "form": form}) 
 
 
-#Alterar um subitem existente.
+#Alterar um subitem existente. (dono e colaborador responsável)
 @login_required
 def edit_item(request, item_id):
     item = get_object_or_404(ProjectItem, id=item_id)
@@ -100,25 +102,20 @@ def edit_item(request, item_id):
     else:
        
         if request.method == 'POST':
-        #Receber os dados do metodo post e substituir pelos dados que estavam na variavel ITEM
+            # Receber os dados do método POST e substituir pelos dados que estavam na variável ITEM
             form = ProjectItemForm(instance=item, data= request.POST)
             if form.is_valid():
                 form.save()
                 return redirect('Itens', project_id = project.id)
         else:
     
-                form = ProjectItemForm(instance=item) #Apresenta o forms preenchido com os subitens registrados previamente.
+                form = ProjectItemForm(instance=item)#Apresenta o forms preenchido com os subitens registrados previamente.
 
-#Tupla de project e Item para usar no html
-    context = {
-        'item': item, 
-        'project': project, 
-        'form': form    
-    }
 
-    return render(request, 'System/edit_item.html', context)
+    return render(request, 'System/edit_item.html', {'item':item, 'project': project, 'form': form})
 
-#Deletar um subitem existente
+
+#Deletar um subitem existente (permitido dono-button não aparece para colaborador responsável)
 @login_required
 def delete_item(request, item_id):
 
@@ -135,19 +132,14 @@ def delete_item(request, item_id):
         item.delete()
         return redirect('Itens', project_id = project.id)
 
-    context = {
-        'item': item, 
-        'project': project, 
-        'form': form    
-    }
 
-    return render(request, 'System/delete_item.html', context)
+    return render(request, 'System/delete_item.html', {'item':item, 'project': project, 'form': form})
 
+#Gerenciar usuários com acesso ao projeto(permitido dono)
 @login_required
 def manage_collaborators(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     
-    # Segurança: Apenas o dono pode gerenciar colaboradores
     if project.dono  != request.user or request.user in project.colaboradores.all():
         return HttpResponseForbidden("Apenas o dono pode adicionar colaboradores.")
 
@@ -159,9 +151,6 @@ def manage_collaborators(request, project_id):
     else:
         form = AddCollaboratorForm(instance=project)
 
-    return render(request, 'System/manage_collaborators.html', {
-        'project': project,
-        'form': form
-    })
+    return render(request, 'System/manage_collaborators.html', {'project':project, 'form': form})
 
 

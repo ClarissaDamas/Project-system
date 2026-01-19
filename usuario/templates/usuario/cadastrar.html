@@ -1,10 +1,6 @@
-{% extends "System/base.html" %} 
- 
-{% block content %}  
+{% extends "System/base.html" %}
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
-
+{% block content %}
 
 <form method="post">
     {% csrf_token %}
@@ -20,9 +16,11 @@
         <div class="field-container">
             <label>{{ field.label }}</label>
             {{ field }}
-            
+
             {% if field.errors %}
-                <span style="color: red; font-size: 0.8em;">{{ field.errors.0 }}</span>
+                <span style="color: red; font-size: 0.8em;">
+                    {{ field.errors.0 }}
+                </span>
             {% endif %}
         </div>
     {% endfor %}
@@ -30,13 +28,42 @@
     <button type="submit">Finalizar Cadastro</button>
 </form>
 
+<!-- JavaScript puro -->
 <script>
-    $(document).ready(function(){
-        // Aplicando as máscaras nos IDs gerados pelo Django
-        // Usat script <script src jquery mask
-        $('#id_cpf').mask('000.000.000-00');
-        $('#id_telefone').mask('(00) 00000-0000');
-    });
+document.addEventListener('DOMContentLoaded', function () {
+
+    const cpfInput = document.getElementById('id_cpf');
+    const telefoneInput = document.getElementById('id_telefone');
+
+    if (cpfInput) {
+        cpfInput.addEventListener('input', function () {
+            this.value = maskCPF(this.value);
+        });
+    }
+
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', function () {
+            this.value = maskTelefone(this.value);
+        });
+    }
+
+    function maskCPF(value) {
+        return value
+            .replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
+
+    function maskTelefone(value) {
+        return value
+            .replace(/\D/g, '')
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{5})(\d)/, '$1-$2');
+    }
+
+});
 </script>
 
-{% endblock content %}  
+
+{% endblock content %}

@@ -2,9 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.auth import get_user_model
 #importar abaixo o model\classe Project
-from django.db.models import Q
 from .models import Project, ProjectItem 
-from django.db import models
 
 #usar um modelo de usuário que estiver ativo neste projeto(usuários ativos podem ser gerenciados no admin do django)
 User = get_user_model()
@@ -14,9 +12,11 @@ class AddCollaboratorForm(forms.ModelForm):
         model = Project
         fields = ['colaboradores']
     
-    def __init__(self, *args, **kwargs):
+    #Função de filtragem (__init__ cria uma subclass) --> no campo de colaboradores ao criar um novo subitem selecionar no formato checkbox e retornar somente usuários ativos no site
+
+    def __init__(self, *args, **kwargs): #args recebe uma infinita lista,  e kwargs recebe infinitos elementos tornando um dicionário   
         super().__init__(*args, **kwargs)
-        self.fields['colaboradores'].widget = forms.CheckboxSelectMultiple()
+        self.fields['colaboradores'].widget = forms.CheckboxSelectMultiple()   
         self.fields['colaboradores'].queryset = get_user_model().objects.all()
 
 
@@ -47,16 +47,6 @@ class ProjectItemForm(forms.ModelForm):
             'prazo': forms.DateInput(attrs={'type': 'date'}),
             'description': forms.Textarea(attrs={'rows': 4}),
         }
-
-    #Funcao de filtrar adicionada com IA
-    def __init__(self, *args, **kwargs):
-        # Recebemos o projeto via view para filtrar os usuários
-        project = kwargs.pop('project', None)
-        super().__init__(*args, **kwargs)
-        
-        if project:
-            # Filtra para mostrar apenas o dono OU colaboradores do projeto
-            self.fields['resp'].queryset = User.objects.filter( models.Q(id=project.dono.id) | models.Q(collaborating_projects=project) ).distinct()
 
 
 

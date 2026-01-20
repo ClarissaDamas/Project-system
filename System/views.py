@@ -4,6 +4,7 @@ from django.urls import reverse
 from .models import Project, ProjectItem 
 from .form import addproject , ProjectItemForm , AddCollaboratorForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 
 
 def index(request):
@@ -70,12 +71,14 @@ def new_item(request, project_id):
     project = get_object_or_404(Project, id=project_id)
 
     if request.method != 'POST':
-        form = ProjectItemForm(project=project)
+        form = ProjectItemForm()
           
     if project.dono  == request.user: #Para mudar e os colaboradores\Responsável conseguirem criar um novo SUBITEM basta adicionar depois de request.user --> or request.user in project.colaboradores.all()   
                 
-        form = ProjectItemForm(data=request.POST, project = project) #acrescentar os dados antes de enviar
-
+        form = ProjectItemForm(data=request.POST) #acrescentar os dados antes de enviar
+        project_dono = get_user_model().objects.filter(id=project.dono.id)
+        project_colaborador = project.colaboradores.all()
+        form.fields['resp'].queryset = (project_dono | project_colaborador).distinct().order_by('-id')   #No campo responsável do forms, adicionar somente se for o dono ou colaborador do projeto. Se alterar para todos os usuários, remover o filtro, se alterar para mais de um colaborador trocar em MODELS.py para Many_to_Many e filtrar usando __init__ em FORM.py
         if form.is_valid():
             new_item = form.save(commit=False)  #Nao salvar diretamente, acrescentar somente os dados
             new_item.project = project

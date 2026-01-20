@@ -33,6 +33,6 @@ def cadastrar(request):
 
 
 #Perfil do usuário
-def perfil(request):
+def perfil(request, user_id):
     return render(request, 'usuario/perfil.html', {'perfil':perfil} )
 

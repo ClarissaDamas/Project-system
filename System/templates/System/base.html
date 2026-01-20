@@ -1,8 +1,15 @@
     <!-- 
       Codigo base para os outros codigos
     -->
-<html>
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">      
+    <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="{% static 'system/css/style.css' %}">
+    </head>
   <body>
+    <script src="{% static 'system/js/script.js' %}"></script>
     <a href="{% url 'Projects' %}">Projetos</a>
     <a href="/admin">Admin</a>
     {% if user.is_authenticated %}
@@ -19,3 +26,4 @@
     {% endblock content %}
   </body>
 </html>
+

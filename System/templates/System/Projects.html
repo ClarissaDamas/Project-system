@@ -6,30 +6,72 @@
       Dashboard usuario com projetos que ele e dono + botao direcionando para o perfil do usuario
     -->
 
-    <!-- 
-      CRIAR uma tabela que mostre projetos em que ele e dono e subitens que ele e responsavel(fazer essa tabela no meu HTML projects, que ja tem a opcao de adicionar um novo projeto)
-    -->
-<ul>
-    {% for project in projects %}
-        <li>
+<div class="dashboard-container">
+    
+    <section class="secao-projetos">
+        <h2>Meus Projetos</h2>
+        <table class="tabela-custom">
+            <thead> <!--Abrir tabela-->
+                <tr>  <!--linha-->
+                    <th>Nome do Projeto</th> <!--cabeçalho-->
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody> <!--corpo da tabela-->
+                {% for project in projects %}
+                <tr data-id="{{ project.id }}"> <!--passar o data id para leitura do css e js-->
+                    <td>{{ project.name }}</td> <!-- TD = conteudo do corpo da tabela,primeira coluna -->
+                    </td>
+                    <td>
+                        <a href="{% url 'detalhesprojeto' project.id %}" class="btn-acao">Ver Detalhes do projeto</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr class="linha-vazia"><td colspan="2">Nenhum projeto encontrado.</td></tr>  <!--coluna span de 2 colunas-->
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'addproject' %}"class="btn-acao">Adicionar novo projeto</a>
+    </section>
 
-            {{ project.name }}
 
-            <a href="{% url 'detalhesprojeto' project.id %}">Detalhes</a>
-            {% if project.dono == request.user %}
-            <a href="{% url 'manage_collaborators' project.id  %}"target="_blank"target="_blank">Gerenciar colaboradores</a>
-            {% endif %}
-        
-        </li>
-    {% empty %}
-        <li>Sem projetos cadastrados</li>
-    {% endfor %}
-<a href="{% url 'addproject' %}">Adicionar novo projeto</a>
-
-
-
-</ul>
-
+<div class="dashboard-container">
+    
+    <section class="secao-projetos">
+        <h2>Subitens</h2>
+        <table class="tabela-custom">
+            <thead> <!--Abrir tabela-->
+                <tr>  <!--linha-->
+                    <th>Subitem</th> <!--cabeçalho-->
+                    <th>Projeto Relacionado</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody> <!--corpo da tabela-->
+                {% for item in Itens %}
+                <tr data-id="{{ item.id }}"> <!--passar o data id para leitura do css e js-->
+                    <td>{{ item.title }}</td> <!-- TD = conteudo do corpo da tabela,primeira coluna -->
+                    </td>
+                    <td>{{item.project.name }}</td>
+                    <td>Status: 
+            {% if item.status == 'P' %}
+                <span style="color: orange;">{{ item.get_status_display }}</span>
+            {% elif item.status == 'A' %}
+                <span style="color: blue;">{{ item.get_status_display }}</span>
+            {% elif item.status == 'C' %}
+                <span style="color: green;">{{ item.get_status_display }}</span>
+            {% endif %}</td>
+                    <td>
+                        <a href="{% url 'Itens' item.id %}" class="btn-acao">Ver detalhes do subitem</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr class="linha-vazia"><td colspan="4">Você não possui subitens</td></tr>  <!--coluna span de 4 colunas-->
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 
 
 {% endblock content %}

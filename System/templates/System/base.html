@@ -1,26 +1,26 @@
     <!-- 
-      Codigo base para os outros codigos
+      Codigo base 
     -->
-{% load static %}
+{% load static %}     <!-- Toda TAG load precisa carregar no arquivo original e no arquivo a ser utilizado -->
 <!DOCTYPE html>
 <html lang="pt-br">      
     <head>
-      <meta charset="UTF-8">
+      <meta charset="UTF-8"> <!-- Permitir pontuação palavras latinas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">     <!-- Usar em PC e celular -->
       <link rel="stylesheet" href="{% static 'system/css/style.css' %}">
     </head>
   <body>
     <script src="{% static 'system/js/script.js' %}"></script>
-    <a href="{% url 'Projects' %}">Projetos</a>
-    <a href="/admin">Admin</a>
     {% if user.is_authenticated %}
-        Bem vindo, {{user.username}}
+        Bem vindo, {{user.first_name}}
         <a href="{% url 'logout' %}">Sair</a>
-        <a href="{% url 'perfil' user.id  %}">perfil</a>
+        <a href="{% url 'perfil' user.id  %}">Perfil</a>
     {% else %}
             <a>Você não está logado.</a>
             <a href="{% url 'login' %}">Entrar</a>
             <a href="{% url 'cadastrar' %}">Cadastrar</a>
     {% endif %}        
+        <a href="{% url 'Projects' %}">Projetos</a> <!-- dashboard usuário -->
     
     {% block content %}
     {% endblock content %}

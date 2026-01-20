@@ -20,7 +20,8 @@ def List_project(request):
     project_dono = Project.objects.filter(dono=request.user)
     project_colaborador = Project.objects.filter(colaboradores=request.user)
     project = (project_dono | project_colaborador).distinct().order_by('-id')
-    return render(request, 'System/Projects.html', {'projects':project}) 
+    itens = ProjectItem.objects.filter(resp=request.user).order_by('-id')
+    return render(request, 'System/Projects.html', {'projects': project, 'Itens': itens}) 
 
 #Apresentar detalhes do projeto(permitido dono ou colaborador)
 @login_required

@@ -24,11 +24,22 @@
     <li><strong>Data final:</strong> {{ project.datafinal }}</li>
 </ul>
 
+
+{% if project.dono == request.user %}
+<button>
+  <a href="{% url 'manage_collaborators' project.id %}" style="text-decoration: none; color: rgb(89, 190, 80);">
+    Gerenciar colaboradores
+  </a>
+</button>
+{%endif %}
+
+
 <button>
   <a href="{% url 'Projects' %}" style="text-decoration: none; color: rgb(0, 8, 255);">
     Voltar
   </a>
 </button>
+
 <button>
   <a href="{% url 'new_item' project.id %}" style="text-decoration: none; color: orange;">
     Adicionar subitem

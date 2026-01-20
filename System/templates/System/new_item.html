@@ -12,7 +12,7 @@
     <form action= "{% url 'new_item' project.id %}" method = "post">
       {% csrf_token %}
       {{ form.as_p }}  
-      <button name="submit">Adicionar subitem</button>
+      <button name="submit" class="btn-save" >Adicionar subitem</button>
       <input type = "hidden" name = "next" value = "{% url 'index' %}"/>
     </form>
 

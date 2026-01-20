@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.index, name = 'index'),
     path('Error', views.page_error , name = 'Error'),
-    path('Projects/', views.List_project, name = 'Projects'),
+    path('Projects', views.List_project, name = 'Projects'),
     path('detalhesprojeto/<int:project_id>/', views.detalhes_project, name = 'detalhesprojeto'), #para acessar o projeto no navegador precisa registrar na barra http://127.0.0.1:8000/perfil/2/
     path('addproject', views.add_project, name = 'addproject'),
     path('new_item/<int:project_id>' , views.new_item, name = 'new_item'),

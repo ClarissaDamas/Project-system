@@ -30,12 +30,12 @@ python manage.py migrate
 Para acessar o painel de controle usar ---> python manage.py createsuperuser
 
 
-○ Como acessar as rotas principais
+○ Como acessar as rotas principais:
 /admin/ 
 /
 
 
-○ Decisões técnicas
+○ Decisões técnicas:
 Environment Variables
 
 *In case of sensitive bugs, please contact clarissapdc@gmail.com

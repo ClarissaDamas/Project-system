@@ -15,7 +15,7 @@ def page_error(request):
 
 
 #Acessar lista de projetos existentes(permitido dono ou colaborador)
-@login_required
+
 def List_project(request):
     project_dono = Project.objects.filter(dono=request.user)
     project_colaborador = Project.objects.filter(colaboradores=request.user)
@@ -24,7 +24,7 @@ def List_project(request):
     return render(request, 'System/Projects.html', {'projects': project, 'Itens': itens}) 
 
 #Apresentar detalhes do projeto(permitido dono ou colaborador)
-@login_required
+
 def detalhes_project(request, project_id):
     dprojeto = get_object_or_404(Project, id = project_id)
 
@@ -37,7 +37,7 @@ def detalhes_project(request, project_id):
 
 
 #Cadastrar novo projeto(permitido todos logados)
-@login_required
+
 def add_project(request):
     if request.method != 'POST':
         form = addproject() #metodo GET mostra o forms vazio
@@ -52,7 +52,7 @@ def add_project(request):
     return render(request, "System/addproject.html", {"form": form})
 
 # Mostrar subitens de um projeto (dono tem acesso a todos os subitens; colaborador tem acesso apenas aos subitens pelos quais é responsável)
-@login_required
+
 def detalhes_subitem(request, item_id):
     item = get_object_or_404(ProjectItem, id=item_id)
     if item.project.dono == request.user or item.resp == request.user:
@@ -74,7 +74,7 @@ def lista_itens(request, project_id):
 
 
 #Adicionar novo subitem do projeto (permitido dono )
-@login_required
+
 def new_item(request, project_id):
     #acessar banco de dados de projetos
     project = get_object_or_404(Project, id=project_id)
@@ -103,7 +103,7 @@ def new_item(request, project_id):
 
 
 #Alterar um subitem existente. (dono e colaborador responsável)
-@login_required
+
 def edit_item(request, item_id):
     item = get_object_or_404(ProjectItem, id=item_id)
     project = item.project
@@ -128,7 +128,7 @@ def edit_item(request, item_id):
 
 
 #Deletar um subitem existente (permitido dono-button não aparece para colaborador responsável)
-@login_required
+
 def delete_item(request, item_id):
 
     item = get_object_or_404(ProjectItem, id=item_id)

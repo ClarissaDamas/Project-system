@@ -1,0 +1,87 @@
+{% extends "System/base.html" %} 
+ 
+{% block content %}  
+
+    <!-- 
+     Apresentar TUDO sobre os subitens(nome e os campos preenchidos)
+    -->
+
+<div class="fundo-detalhes">
+    <div class="cartao-detalhes" style="max-width: 1000px;"> <div class="detalhes-header">
+            <span class="projeto-tag"><i class="bi bi-folder"></i> Projeto</span>
+            <h2>Subitens de: {{ project.name }}</h2>
+        </div>
+
+        <div class="tabela-container">
+            <table class="tabela-custom">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Responsável</th>
+                        <th>Status</th>
+                        <th>Prazo</th>
+                        <th class="texto-direita">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in itens %}
+                    <tr>
+                        <td>
+                            <strong>{{ item.title }}</strong>
+                            <br>
+                            <small style="color: #888;">{{ item.description|truncatechars:30 }}</small>
+                        </td>
+                        <td><i class="bi bi-person icone-dourado"></i> {{ item.resp }}</td>
+                        <td>
+                            {% if item.status == 'P' %}
+                                <span class="status-badge status-pendente">{{ item.get_status_display }}</span>
+                            {% elif item.status == 'A' %}
+                                <span class="status-badge status-andamento">{{ item.get_status_display }}</span>
+                            {% elif item.status == 'C' %}
+                                <span class="status-badge status-concluido">{{ item.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.prazo %}
+                                {{ item.prazo|date:"d/m/Y" }}
+                            {% else %}
+                                <span class="texto-apagado">---</span>
+                            {% endif %}
+                        </td>
+                        <td class="texto-direita">
+                            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                <a href="{% url 'edit_item' item.id %}" class="link-dourado" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                
+                                {% if project.dono.id == request.user.id %}
+                                <a href="{% url 'delete_item' item.id %}" style="color: #ff4d4d;" title="Deletar">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr class="linha-vazia">
+                        <td colspan="5">Este projeto ainda não possui subitens.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="detalhes-footer">
+            <a href="{% url 'new_item' project.id %}" class="btn-dourado">
+                <i class="bi bi-plus-lg"></i> Adicionar Novo Subitem
+            </a>
+            <a href="{% url 'Projects' %}" class="btn-detalhe-item">
+                <i class="bi bi-arrow-left"></i> Voltar ao Dashboard
+            </a>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock content %}  

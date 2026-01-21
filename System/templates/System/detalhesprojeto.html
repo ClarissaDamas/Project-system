@@ -1,56 +1,85 @@
 {% extends "System/base.html" %} 
- 
+{% load static %} 
 {% block content %}  
 
-    <!-- 
-     Apresentar TUDO sobre um projeto(dono, objetivo, colaboradores)
+ 
+ <!-- 
+     Apresentar TUDO sobre o projeto(nome e os campos preenchidos)
     -->
+<div class="fundo-detalhes">
+    <div class="cartao-detalhes">
+        <div class="detalhes-header">
+            <span class="projeto-tag"><i class="bi bi-folder"></i> {{ project.name }}</span>
+            <h2>{{ project.name }}</h2>
+        </div>
+
+        <div class="detalhes-corpo">
+            <div class="info-bloco">
+                <label><i class="bi bi-chat-left-text icone-dourado"></i> Dono </label>
+                <p>{{ project.dono }}</p>
+            </div>
+
+                <div class="info-bloco">
+                    <label><i class="bi bi-tags icone-dourado"></i> Objetivo</label>
+                    <p>{{ project.objetivo }}</p>
+                </div>
+
+                <div class="info-bloco">
+                    <label><i class="bi bi-info-circle icone-dourado"></i> Colaboradores:</label>
+                    <p>
+                        {% for colaborador in project.colaboradores.all %}
+                            {{ colaborador.first_name }}{% if not forloop.last %}, {% endif %}
+                          {% empty %}
+                            Nenhum colaborador adicionado.
+                        {% endfor %}
+                    </p>
+                </div>
 
 
-<h1>Detalhes do Projeto</h1>
-<ul>
+                <div class="info-bloco">
+                    <label><i class="bi bi-tags icone-dourado"></i> Data de início:</label>
+                    <p>{{ project.datainicio }}</p>
+                </div>
 
-    <li><strong>Nome:</strong> {{ project.name }}</li>
-    <li><strong>Objetivo:</strong> {{ project.objetivo }}</li>
-    <li><strong>Dono:</strong> {{ project.dono }}</li>
-    <li><strong>Colaboradores:</strong> 
-      {% for colaborador in project.colaboradores.all %}
-        {{ colaborador.first_name }}{% if not forloop.last %}, {% endif %}
-      {% empty %}
-        Nenhum colaborador adicionado.
-     {% endfor %}
-    </li>
-    <li><strong>Data de início:</strong> {{ project.datainicio }}</li>
-    <li><strong>Data final:</strong> {{ project.datafinal }}</li>
-</ul>
-
-
-{% if project.dono == request.user %}
-<button>
-  <a href="{% url 'manage_collaborators' project.id %}" style="text-decoration: none; color: rgb(89, 190, 80);">
-    Gerenciar colaboradores
-  </a>
-</button>
-{%endif %}
-
-
-<button>
-  <a href="{% url 'Projects' %}" style="text-decoration: none; color: rgb(0, 8, 255);">
-    Voltar
-  </a>
-</button>
-
-<button>
-  <a href="{% url 'new_item' project.id %}" style="text-decoration: none; color: orange;">
-    Adicionar subitem
-  </a>
-</button>
-<button>
-  <a href="{% url 'Itens' project.id %}" style="text-decoration: none; color: rgb(255, 0, 157);">
-    Lista subitens
-  </a>
-</button>
+                
+                <div class="info-bloco">
+                    <label><i class="bi bi-tags icone-dourado"></i> Data final:</label>
+                    <p>{{ project.datafinal }}</p>
+                </div>
 
 
 
-{% endblock %} 
+            </div>
+
+            <div class="detalhes-footer" style="flex-direction: column; gap: 15px;">
+    
+    {% if project.dono.id == request.user.id %}
+        <a href="{% url 'manage_collaborators' project.id %}" class="btn-dourado">
+            <i class="bi bi-people"></i> Gerenciar Colaboradores
+        </a>
+    {% endif %}
+
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <a href="{% url 'new_item' project.id %}" class="btn-dourado" style="flex: 1;">
+                            <i class="bi bi-check-lg"></i> Adicionar Subitem
+                        </a>
+                        
+                        <a href="{% url 'lista_itens' project.id %}" class="btn-dourado" style="flex: 1; background-color: transparent; border: 1px solid rgb(224, 164, 23); color: rgb(224, 164, 23);">
+                            <i class="bi bi-list-ul"></i> Lista Subitens
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="voltar-link">
+                    <a href="{% url 'index' %}">
+                        <i class="bi bi-arrow-left"></i> Voltar ao Dashboard
+                    </a>
+                </div>
+       
+        
+        </div>
+
+    </div>
+</div>
+{% endblock %}

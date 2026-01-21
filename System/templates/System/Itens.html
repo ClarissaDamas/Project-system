@@ -1,67 +1,78 @@
 {% extends "System/base.html" %} 
- 
+{% load static %} 
 {% block content %}  
 
     <!-- 
-     Apresentar TUDO sobre os subitens(nome e os campos preenchidos)
+     UM subitem(nome e os campos preenchidos)
     -->
-
-
-    <p>Subitens do projeto: {{ project.name }}</p>
-
-    <p>Subitens:</p>
-    <ul>
-        {% for item in itens %}
-        <div class="item-box">
-       <!-- TÍTULO  --> 
-            <p>Título: {{ item.title }}</p>
-        <!-- DESCRIÇÃO  --> 
-            <p>Descrição: {{ item.description}}</p>
-        <!-- RESPONSÁVEL  --> 
-            <p>Responsável: {{ item.resp }}</p>
-       <!-- TIPO  --> 
-            <p>Tipo: {{ item.get_tipo_display }}</p>
-            <p>
-       <!-- STATUS  --> 
-            Status: 
-            {% if item.status == 'P' %}
-                <span style="color: orange;">{{ item.get_status_display }}</span>
-            {% elif item.status == 'A' %}
-                <span style="color: blue;">{{ item.get_status_display }}</span>
-            {% elif item.status == 'C' %}
-                <span style="color: green;">{{ item.get_status_display }}</span>
-            {% endif %}
-            </p>
-            <p>
-      <!-- PRAZO -->           
-            Prazo: 
-            {% if item.prazo == None %}
-                Sem prazo definido
-            {% else %}
-                {{ item.prazo }}
-            {% endif %}
-            </p>
+<div class="fundo-detalhes">
+    <div class="cartao-detalhes">
+        <div class="detalhes-header">
+            <span class="projeto-tag"><i class="bi bi-folder"></i> {{ item.project.name }}</span>
+            <h2>{{ item.title }}</h2>
         </div>
 
-        {% if project.dono == request.user %}
-        <p>
-            <a href="{% url 'delete_item' item.id %}">Deletar este item</a>
-        </p>
-        {% endif %}
-                <p>
-            <a href="{% url 'edit_item' item.id %}">Editar este item</a>
-        </p>
+        <div class="detalhes-corpo">
+            <div class="info-bloco">
+                <label><i class="bi bi-chat-left-text icone-dourado"></i> Descrição</label>
+                <p>{{ item.description|default:"Sem descrição fornecida." }}</p>
+            </div>
 
-        {% empty %}
+            <div class="info-grid">
+                <div class="info-bloco">
+                    <label><i class="bi bi-person icone-dourado"></i> Responsável</label>
+                    <p>{{ item.resp.first_name|default:item.resp.username }}</p>
+                </div>
 
-        <li>Sem subitens</li>
-        <a href="{% url 'new_item' project.id %}">Adicionar subitem</a>
-        {% endfor %}
+                <div class="info-bloco">
+                    <label><i class="bi bi-tags icone-dourado"></i> Tipo</label>
+                    <p>{{ item.get_tipo_display }}</p>
+                </div>
 
-</ul>
+                <div class="info-bloco">
+                    <label><i class="bi bi-info-circle icone-dourado"></i> Status</label>
+                    <p>
+                        {% if item.status == 'P' %}
+                            <span class="status-badge status-pendente">{{ item.get_status_display }}</span>
+                        {% elif item.status == 'A' %}
+                            <span class="status-badge status-andamento">{{ item.get_status_display }}</span>
+                        {% elif item.status == 'C' %}
+                            <span class="status-badge status-concluido">{{ item.get_status_display }}</span>
+                        {% endif %}
+                    </p>
+                </div>
 
+                <div class="info-bloco">
+                    <label><i class="bi bi-calendar-event icone-dourado"></i> Prazo</label>
+                    <p>
+                        {% if item.prazo == None %}
+                            <span class="texto-apagado">Sem prazo definido</span>
+                        {% else %}
+                            {{ item.prazo|date:"d/m/Y" }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
 
-{% endblock content %}  
+        <div class="detalhes-footer">
+            <a href="{% url 'edit_item' item.id %}" class="btn-acao btn-editar">
+                Editar Item
+            </a>
+            
+            {% if item.project.dono == request.user %}
+                <a href="{% url 'delete_item' item.id %}" class="btn-acao btn-deletar">
+                    <i class="bi bi-trash"></i> Deletar
+                </a>
+            {% endif %}
+        </div>
+        
+        <div class="voltar-link">
+            <a href="{% url 'Projects' %}"><i class="bi bi-arrow-left"></i> Voltar ao Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
 
 
 

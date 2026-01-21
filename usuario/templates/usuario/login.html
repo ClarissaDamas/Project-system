@@ -6,12 +6,40 @@
       Página de login do usuário cadastrado
     -->
 
-    <form action= "{% url 'login' %}" method = "post">
-      {% csrf_token %}
-      {{ form.as_p }}  
-      <button name="submit">Entrar</button>
-      <input type = "hidden" name = "next" value = "{% url 'index' %}"/>
-    </form>
 
+<div class="fundo-form">
+    <div class="cartao-cadastro">
+        <h2>Entrar</h2>
+          <form action= "{% url 'login' %}" method = "post">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="error-summary">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="field-container">
+                    <label>{{ field.label }}</label>
+                    <div class="input-wrapper">
+                        {% if "user" in field.name %}
+                            <i class="bi bi-person icone-input"></i>
+                        {% else %}
+                            <i class="bi bi-lock icone-input"></i>
+                        {% endif %}
+                        
+                        {{ field }}
+                    </div>
+
+                    {% if field.errors %}
+                        <span class="field-error">{{ field.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn-acao">Login</button>
+        </form>
+    </div>
+</div>
 
 {% endblock content %}  

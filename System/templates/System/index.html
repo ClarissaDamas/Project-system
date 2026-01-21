@@ -3,10 +3,25 @@
 {% load static %}
 {% block content %}  
 
-<title>Projeto</title>  {# Titulo na barra do navegador #}
-<h1>Nome do site</h1>    
-<h2>  Cadastre seus projetos para maior organização na sua empresa </h2>
-<img class="small-image" src= "{% static 'system/Imagens/PessoasProjeto.jpg' %}" alt="Cadastre seu projeto" >
-<a href="{% url 'cadastrar' %}">Cadastre-se</a>    
+
+<!--tudo com a mesma fonte-->
+
+<section class="background-image">
+    <div class="overlay"> </div>
+
+      <div class = "conteudo">
+      <title>Projeto</title>  {# Titulo na barra do navegador #}
+      <h1>Gerenciador de projetos</h1>    
+      <p>  Cadastre seus projetos para maior organização na sua empresa </p>
+      {% if user.is_authenticated %}
+            <p>Bem vindo, {{user.first_name}}!</p>     
+            <a href="{% url 'addproject' %}"class="btn-acao">Adicionar novo projeto</a> {% else %} 
+      <a href="{% url 'cadastrar' %}" class="btn-acao">Cadastre-se</a>       
+      <a href="{% url 'login' %}" class="btn-acao">Login</a>  
+      {%endif%}
+    </div>
+</section>
+
+
 
 {% endblock content %}

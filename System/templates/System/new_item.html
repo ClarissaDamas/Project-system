@@ -1,23 +1,48 @@
-{% extends "System/base.html" %} 
- 
-{% block content %}  
+{% extends "System/base.html" %}
+{% load static %}
 
-    <!-- 
-      Adiciona um novo subitem 
-    -->
+{% block content %}
+<div class="fundo-detalhes"> <div class="cartao-detalhes"> <div class="detalhes-header">
+            <span class="projeto-tag">
+                <i class="bi bi-folder"></i> Projeto: {{ project.name }}
+            </span>
+            <h2>Novo Subitem</h2>
+        </div>
 
+        <form action="{% url 'new_item' project.id %}" method="post">
+            {% csrf_token %}
 
-    <p>Adicionando item ao projeto: {{ project.name }}</p>
-    <p><a href="{% url 'new_item' project.id %}"></a></p>
-    <form action= "{% url 'new_item' project.id %}" method = "post">
-      {% csrf_token %}
-      {{ form.as_p }}  
-      <button name="submit" class="btn-save" >Adicionar subitem</button>
-      <input type = "hidden" name = "next" value = "{% url 'index' %}"/>
-    </form>
+            {% for field in form %}
+                <div class="field-container"> <label>{{ field.label }}</label>
+                    <div class="input-wrapper"> {% if "title" in field.name or "nome" in field.name %}
+                            <i class="bi bi-pencil-square icone-input"></i>
+                        {% elif "resp" in field.name %}
+                            <i class="bi bi-person-badge icone-input"></i>
+                        {% elif "prazo" in field.name or "data" in field.name %}
+                            <i class="bi bi-calendar-date icone-input"></i>
+                        {% else %}
+                            <i class="bi bi-info-circle icone-input"></i>
+                        {% endif %}
 
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
 
-{% endblock content %}  
+            <button type="submit" name="submit" class="btn-dourado">
+                <i class="bi bi-check-lg"></i> Adicionar Subitem
+            </button>
+            
+            <input type="hidden" name="next" value="{% url 'index' %}"/>
+        </form>
 
+        <div class="voltar-link">
+            <a href="{% url 'detalhesprojeto'  project.id %}">
+                <i class="bi bi-arrow-left"></i> Cancelar e Voltar
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
 
 

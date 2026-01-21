@@ -1,69 +1,45 @@
 {% extends "System/base.html" %}
+{% load static %}
 
 {% block content %}
+<div class="fundo-form">
+    <div class="cartao-cadastro">
+        <h2>Criar Conta</h2>
 
-<form method="post">
-    {% csrf_token %}
+        <form method="post">
+            {% csrf_token %}
 
-    {% if form.errors %}
-        <div style="background-color: #ffcccc; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-            <strong>Por favor, corrija os erros abaixo:</strong>
-            {{ form.non_field_errors }}
-        </div>
-    {% endif %}
-
-    {% for field in form %}
-        <div class="field-container">
-            <label>{{ field.label }}</label>
-            {{ field }}
-
-            {% if field.errors %}
-                <span style="color: red; font-size: 0.8em;">
-                    {{ field.errors.0 }}
-                </span>
+            {% if form.errors %}
+                <div class="error-summary">
+                    {{ form.non_field_errors }}
+                </div>
             {% endif %}
-        </div>
-    {% endfor %}
 
-    <button type="submit">Finalizar Cadastro</button>
-</form>
+            {% for field in form %}
+                <div class="field-container">
+                    <label>{{ field.label }}</label>
+                    <div class="input-wrapper">
+                        {% if "user" in field.name %}
+                            <i class="bi bi-person icone-input"></i>
+                        {% elif "email" in field.name %}
+                            <i class="bi bi-envelope icone-input"></i>
+                        {% elif "pass" in field.name %}
+                            <i class="bi bi-lock icone-input"></i>
+                        {% else %}
+                            <i class="bi bi-pencil icone-input"></i>
+                        {% endif %}
+                        
+                        {{ field }}
+                    </div>
 
-<!-- JavaScript puro -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
+                    {% if field.errors %}
+                        <span class="field-error">{{ field.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
-    const cpfInput = document.getElementById('id_cpf');
-    const telefoneInput = document.getElementById('id_telefone');
-
-    if (cpfInput) {
-        cpfInput.addEventListener('input', function () {
-            this.value = maskCPF(this.value);
-        });
-    }
-
-    if (telefoneInput) {
-        telefoneInput.addEventListener('input', function () {
-            this.value = maskTelefone(this.value);
-        });
-    }
-
-    function maskCPF(value) {
-        return value
-            .replace(/\D/g, '')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-    }
-
-    function maskTelefone(value) {
-        return value
-            .replace(/\D/g, '')
-            .replace(/(\d{2})(\d)/, '($1) $2')
-            .replace(/(\d{5})(\d)/, '$1-$2');
-    }
-
-});
-</script>
-
-
+            <button type="submit" class="btn-acao">Finalizar Cadastro</button>
+        </form>
+    </div>
+</div>
 {% endblock content %}

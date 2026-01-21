@@ -1,21 +1,47 @@
 {% extends "System/base.html" %}
+{% load static %}
 
 {% block content %}
 
-    <!-- 
-     Adicionar ou remover um colaborador do projeto
-    -->
-
-  <h2>Gerenciar Colaboradores: {{ project.name }}</h2>
-  
-  <form method="post">
-    {% csrf_token %}
-    <p>Selecione os usuários que podem colaborar neste projeto:</p>
-    {{ form.colaboradores}}
+<div class="fundo-detalhes">
     
-    <br>
-    <button type="submit">Salvar Colaboradores</button>
-    <a href="{% url 'Itens' project.id %}">Voltar</a>
-  </form>
-  
+    <div class="cartao-detalhes">
+        
+        <div class="detalhes-header">
+            <span class="projeto-tag">
+                <i class="bi bi-folder"></i> Projeto: {{ project.name }}
+            </span>
+            <h2>Gerenciar Equipe</h2>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="field-container">
+                <h4>Selecionar Colaboradores:</h4>
+                
+                <div class="input-wrapper">
+                    
+                    
+                    {{ form.colaboradores }}
+                </div>
+            </div>
+
+            <div class="detalhes-footer">
+                <button type="submit" class="btn-dourado">
+                    <i class="bi bi-check-lg"></i> Salvar Colaboradores
+                </button>
+            </div>
+
+        </form>
+
+        <div class="voltar-link">
+            <a href="{% url 'Projects'  %}">
+                <i class="bi bi-arrow-left"></i> Voltar ao Painel
+            </a>
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}

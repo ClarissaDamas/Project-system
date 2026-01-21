@@ -1,77 +1,90 @@
 {% extends "System/base.html" %}
+{% load static %}
 
 {% block content %}
+<div class="fundo-dashboard"> <div class="container-dashboard">
+        
+        <section class="cartao-secao">
+            <div class="secao-header">
+                <h2><i class="bi bi-stack icone-dourado"></i> Meus Projetos</h2>
+                <a href="{% url 'addproject' %}" class="btn-dourado-pequeno">
+                    <i class="bi bi-plus-lg"></i> Novo Projeto
+                </a>
+            </div>
 
-    <!-- 
-      Dashboard usuario com projetos que ele e dono + botao direcionando para o perfil do usuario
-    -->
+            <div class="tabela-container">
+                <table class="tabela-custom">
+                    <thead>
+                        <tr>
+                            <th>Nome do Projeto</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in projects %}
+                        <tr>
+                            <td class="nome-projeto">{{ project.name }}</td>
+                            <td class="texto-direita">
+                                <a href="{% url 'detalhesprojeto' project.id %}" class="link-dourado">
+                                    Ver Detalhes <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="linha-vazia">
+                            <td colspan="2">Nenhum projeto encontrado.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-<div class="dashboard-container">
-    
-    <section class="secao-projetos">
-        <h2>Meus Projetos</h2>
-        <table class="tabela-custom">
-            <thead> <!--Abrir tabela-->
-                <tr>  <!--linha-->
-                    <th>Nome do Projeto</th> <!--cabeçalho-->
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody> <!--corpo da tabela-->
-                {% for project in projects %}
-                <tr data-id="{{ project.id }}"> <!--passar o data id para leitura do css e js-->
-                    <td>{{ project.name }}</td> <!-- TD = conteudo do corpo da tabela,primeira coluna -->
-                    </td>
-                    <td>
-                        <a href="{% url 'detalhesprojeto' project.id %}" class="btn-acao">Ver Detalhes do projeto</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr class="linha-vazia"><td colspan="2">Nenhum projeto encontrado.</td></tr>  <!--coluna span de 2 colunas-->
-                {% endfor %}
-            </tbody>
-        </table>
-        <a href="{% url 'addproject' %}"class="btn-acao">Adicionar novo projeto</a>
-    </section>
+        <section class="cartao-secao">
+            <div class="secao-header">
+                <h2><i class="bi bi-list-check icone-dourado"></i> Subitens</h2>
+            </div>
 
+            <div class="tabela-container">
+                <table class="tabela-custom">
+                    <thead>
+                        <tr>
+                            <th>Subitem</th>
+                            <th>Projeto Relacionado</th>
+                            <th>Status</th>
+                            <th class="texto-direita">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in Itens %}
+                        <tr>
+                            <td><strong>{{ item.title }}</strong></td>
+                            <td><span class="tag-projeto-dark">{{ item.project.name }}</span></td>
+                            <td>
+                                {% if item.status == 'P' %}
+                                    <span class="status-badge status-pendente">{{ item.get_status_display }}</span>
+                                {% elif item.status == 'A' %}
+                                    <span class="status-badge status-andamento">{{ item.get_status_display }}</span>
+                                {% elif item.status == 'C' %}
+                                    <span class="status-badge status-concluido">{{ item.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="texto-direita">
+                                <a href="{% url 'Itens' item.id %}" class="btn-detalhe-item">
+                                    <i class="bi bi-search"></i> Detalhes
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr class="linha-vazia">
+                            <td colspan="4">Você não possui subitens pendentes.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-<div class="dashboard-container">
-    
-    <section class="secao-projetos">
-        <h2>Subitens</h2>
-        <table class="tabela-custom">
-            <thead> <!--Abrir tabela-->
-                <tr>  <!--linha-->
-                    <th>Subitem</th> <!--cabeçalho-->
-                    <th>Projeto Relacionado</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody> <!--corpo da tabela-->
-                {% for item in Itens %}
-                <tr data-id="{{ item.id }}"> <!--passar o data id para leitura do css e js-->
-                    <td>{{ item.title }}</td> <!-- TD = conteudo do corpo da tabela,primeira coluna -->
-                    </td>
-                    <td>{{item.project.name }}</td>
-                    <td>Status: 
-            {% if item.status == 'P' %}
-                <span style="color: orange;">{{ item.get_status_display }}</span>
-            {% elif item.status == 'A' %}
-                <span style="color: blue;">{{ item.get_status_display }}</span>
-            {% elif item.status == 'C' %}
-                <span style="color: green;">{{ item.get_status_display }}</span>
-            {% endif %}</td>
-                    <td>
-                        <a href="{% url 'Itens' item.id %}" class="btn-acao">Ver detalhes do subitem</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr class="linha-vazia"><td colspan="4">Você não possui subitens</td></tr>  <!--coluna span de 4 colunas-->
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
-
-
+    </div>
+</div>
 {% endblock content %}

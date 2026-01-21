@@ -5,16 +5,46 @@
     <!-- 
       Deletar um subitem criado
     -->
+<div class="fundo-detalhes"> <div class="cartao-detalhes"> <div class="detalhes-header">
+            <span class="projeto-tag">
+                <i class="bi bi-folder"></i> Projeto: {{ project.name }}
+            </span>
+            <h2>Deletar Subitem</h2>
+        </div>
 
-<form action="{% url 'delete_item' item.id %}" method="post">
-    {% csrf_token %}
-    
-    {{ form.as_p }}
-    
-    <button type="submit">Deletar</button>
-    <a href="{% url 'Itens' project.id %}">Cancelar</a>
-</form>
+        <form action="{% url 'lista_itens' project.id %}" method="post">
+            {% csrf_token %}
 
-{% endblock content %}  
+            {% for field in form %}
+                <div class="field-container"> <label>{{ field.label }}</label>
+                    <div class="input-wrapper"> {% if "title" in field.name or "nome" in field.name %}
+                            <i class="bi bi-pencil-square icone-input"></i>
+                        {% elif "resp" in field.name %}
+                            <i class="bi bi-person-badge icone-input"></i>
+                        {% elif "prazo" in field.name or "data" in field.name %}
+                            <i class="bi bi-calendar-date icone-input"></i>
+                        {% else %}
+                            <i class="bi bi-info-circle icone-input"></i>
+                        {% endif %}
 
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <button type="submit" name="submit" class="btn-dourado">
+                <i class="bi bi-check-lg"></i> Deletar subitem
+            </button>
+            
+            <input type="hidden" name="next" value="{% url 'index' %}"/>
+        </form>
+
+        <div class="voltar-link">
+            <a href="{% url 'Projects' %}">
+                <i class="bi bi-arrow-left"></i> Cancelar e Voltar
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
 

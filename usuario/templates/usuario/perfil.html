@@ -6,22 +6,44 @@
       Página para apresentar o perfil do usuário
     -->
 
-<h2>Perfil</h2>
-<ul>
+<div class="fundo-detalhes">
+    <div class="cartao-detalhes">
+        <div class="detalhes-header">
+            <h1>Perfil</h1>
+        </div>
 
-    <li><strong>Nome:</strong> {{user.username }}</li>
-    <li><strong>E-mail:</strong> {{ user.email }}</li>
-    <li><strong>CPF:</strong> {{ user.cpf }}</li>
-    <li><strong>Telefone:</strong> {{ user.telefone }}</li>
-    <li><strong>Data de nascimento:</strong> {{ user.data_nascimento }}</li>
-</ul>
+        <div class="detalhes-corpo">
+            <div class="info-bloco">
+                <label><i class="bi bi-chat-left-text icone-dourado"></i> Nome </label>
+                <p>{{ user.first_name }}</p>
+            </div>
 
-<button>
-  <a href="{% url 'Projects' %}" style="text-decoration: none; color: rgb(0, 8, 255);">
-    Voltar
-  </a>
-</button>
+                <div class="info-bloco">
+                    <label> Nome de usuário:</label>
+                    <p>{{ user.username  }}</p>
+                </div>
 
+                <div class="info-bloco">
+                    <label> E-mail:</label>
+                    <p>{{ user.email   }}</p>
+                </div>
+                <div class="info-bloco">
+                    <label></i> CPF:</label>
+                    <p>{{ user.cpf   }}</p>
+                </div>
+                <div class="info-bloco">
+                    <label></i> Telefone:</label>
+                    <p>{{ user.telefone   }}</p>
+                </div>
+                <div class="info-bloco">
+                    <label></i> Data de nascimento:</label>
+                    <p>{{ user.data_nascimento   }}</p>
+                </div>
 
+             </div>
+
+         </div>
+
+     </div>
 
 {% endblock content %}  

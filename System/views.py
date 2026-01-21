@@ -53,7 +53,15 @@ def add_project(request):
 
 # Mostrar subitens de um projeto (dono tem acesso a todos os subitens; colaborador tem acesso apenas aos subitens pelos quais é responsável)
 @login_required
-def Itens(request, project_id):
+def detalhes_subitem(request, item_id):
+    item = get_object_or_404(ProjectItem, id=item_id)
+    if item.project.dono == request.user or item.resp == request.user:
+        return render(request, 'System/Itens.html', { "item": item}) 
+    else:
+        return render(request, 'System/error.html' )
+    
+
+def lista_itens(request, project_id):
     project = Project.objects.get(id = project_id)
     responsavel_objetos = ProjectItem.objects.filter(project=project, resp=request.user)
     if project.dono  == request.user: 
@@ -62,7 +70,7 @@ def Itens(request, project_id):
         itens = project.subitens.filter(resp=request.user).order_by('-id')
     else:
         return render(request, 'System/error.html' )
-    return render(request, 'System/Itens.html', {'project':project, "itens": itens}) 
+    return render(request, 'System/lista_itens.html', {'project':project, "itens": itens}) 
 
 
 #Adicionar novo subitem do projeto (permitido dono )
@@ -110,7 +118,7 @@ def edit_item(request, item_id):
             form = ProjectItemForm(instance=item, data= request.POST)
             if form.is_valid():
                 form.save()
-                return redirect('Itens', project_id = project.id)
+                return redirect('lista_itens', project_id = project.id)
         else:
     
                 form = ProjectItemForm(instance=item)#Apresenta o forms preenchido com os subitens registrados previamente.
@@ -134,27 +142,26 @@ def delete_item(request, item_id):
     else:
         #Receber os dados e deletar 
         item.delete()
-        return redirect('Itens', project_id = project.id)
+        return redirect('lista_itens', project_id = project.id)
 
 
     return render(request, 'System/delete_item.html', {'item':item, 'project': project, 'form': form})
 
 #Gerenciar usuários com acesso ao projeto(permitido dono)
-@login_required
 def manage_collaborators(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     
-    if project.dono  != request.user or request.user in project.colaboradores.all():
+    # Verificação simplificada: Se o ID do usuário logado for diferente do ID do dono, barra.
+    if project.dono.id != request.user.id:
         return HttpResponseForbidden("Apenas o dono pode adicionar colaboradores.")
 
     if request.method == 'POST':
         form = AddCollaboratorForm(request.POST, instance=project)
         if form.is_valid():
-            form.save() # O ModelForm já lida com o ManyToMany automaticamente no save()
-            return redirect('Itens', project_id=project.id)
+            form.save()
+            # Redireciona para a nova função 'lista_itens' que criamos
+            return redirect('lista_itens', project_id=project.id)
     else:
         form = AddCollaboratorForm(instance=project)
 
-    return render(request, 'System/manage_collaborators.html', {'project':project, 'form': form})
-
-
+    return render(request, 'System/manage_collaborators.html', {'project': project, 'form': form})
